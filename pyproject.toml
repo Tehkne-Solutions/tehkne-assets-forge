@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tehkne-assets-forge"
+version = "0.1.0"
+description = "Pipeline reutilizável para validar, processar e integrar packs de assets de jogos."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Proprietary - license pending"}
+authors = [{name = "Tehkné Solutions"}]
+dependencies = []
+
+[project.scripts]
+tehkne-assets-forge = "tehkne_assets_forge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
