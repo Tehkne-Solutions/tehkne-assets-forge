@@ -66,3 +66,33 @@ def test_budget_command_returns_distinct_failure_code(tmp_path: Path) -> None:
     )
     assert code == 3
     assert payload["passed"] is False
+
+
+def test_validate_hoc_landmarks_command(tmp_path: Path) -> None:
+    art = tmp_path / "art"
+    art.mkdir()
+    (art / "city.png").write_bytes(b"city")
+    (art / "mine.png").write_bytes(b"mine")
+    manifest = tmp_path / "pack-manifest.json"
+    write_json(
+        manifest,
+        {
+            "schema": "hoc/world-landmarks/v1",
+            "project": "Hexa Octarina Conquer",
+            "signature": "Tehkné Solutions",
+            "assets": [
+                {"id": "LANDMARK_CITY_NEUTRAL_01", "role": "city", "file": "art/city.png"},
+                {"id": "LANDMARK_MINE_NEUTRAL_01", "role": "mine", "file": "art/mine.png"},
+            ],
+        },
+    )
+    code, payload = run(
+        argparse.Namespace(
+            command="validate-hoc-landmarks",
+            manifest=manifest,
+            root=tmp_path,
+        )
+    )
+    assert code == 0
+    assert payload["valid"] is True
+    assert payload["asset_count"] == 2
