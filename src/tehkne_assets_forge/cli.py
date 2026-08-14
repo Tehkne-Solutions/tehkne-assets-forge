@@ -7,6 +7,7 @@ from pathlib import Path
 from . import __version__
 from .budget import AssetBudget, evaluate_budget, scan_disk_metrics
 from .checksums import ChecksumError, sha256_file, verify_sha256
+from .hoc_landmarks import HocLandmarkError, validate_hoc_landmark_manifest
 from .intake import IntakeError, extract_zip_intake
 
 
@@ -17,6 +18,17 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate = sub.add_parser("validate-catalog", help="Valida um catálogo de packs.")
     validate.add_argument("catalog", type=Path)
+
+    hoc_landmarks = sub.add_parser(
+        "validate-hoc-landmarks",
+        help="Valida o contrato HOC de landmarks world-space City + Mine.",
+    )
+    hoc_landmarks.add_argument("manifest", type=Path)
+    hoc_landmarks.add_argument(
+        "--root",
+        type=Path,
+        help="Raiz do pacote para exigir que os arquivos renderizáveis existam e não estejam vazios.",
+    )
 
     checksum = sub.add_parser("checksum", help="Calcula SHA-256 de um arquivo.")
     checksum.add_argument("file", type=Path)
@@ -63,6 +75,8 @@ def validate_catalog(path: Path) -> dict[str, object]:
 def run(args: argparse.Namespace) -> tuple[int, dict[str, object]]:
     if args.command == "validate-catalog":
         return 0, validate_catalog(args.catalog)
+    if args.command == "validate-hoc-landmarks":
+        return 0, validate_hoc_landmark_manifest(args.manifest, root=args.root)
     if args.command == "checksum":
         return 0, {"valid": True, "file": str(args.file), "sha256": sha256_file(args.file)}
     if args.command == "verify-checksum":
@@ -90,7 +104,7 @@ def main() -> int:
     args = build_parser().parse_args()
     try:
         code, payload = run(args)
-    except (OSError, ValueError, json.JSONDecodeError, ChecksumError, IntakeError) as exc:
+    except (OSError, ValueError, json.JSONDecodeError, ChecksumError, IntakeError, HocLandmarkError) as exc:
         code, payload = 2, {"valid": False, "error": str(exc)}
     print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
     return code
