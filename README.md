@@ -15,6 +15,31 @@ Pipeline open source e reutilizável da **Tehkné Solutions** para produção, v
 
 A primeira implementação será extraída do pipeline criado para o Taijifu Masters, removendo dependências específicas do personagem Lian Wu e transformando contratos, comandos e workflows em componentes reutilizáveis.
 
+## HOC world landmarks
+
+O Forge também valida extensões authored de landmarks world-space do **Hexa Octarina Conquer**.
+
+Contrato atual: `hoc/world-landmarks/v1`.
+
+IDs neutros obrigatórios:
+
+- `LANDMARK_CITY_NEUTRAL_01`
+- `LANDMARK_MINE_NEUTRAL_01`
+
+Validação do manifest:
+
+```bash
+tehkne-assets-forge validate-hoc-landmarks pack-manifest.json
+```
+
+Validação fail-closed do pacote materializado, incluindo existência e tamanho não-zero das artes:
+
+```bash
+tehkne-assets-forge validate-hoc-landmarks pack-manifest.json --root .
+```
+
+O contrato rejeita famílias semânticas incorretas, IDs duplicados, arquivos não renderizáveis e semântica de UI como `icon`, `badge`, `marker`, `portrait`, `card`, `frame`, `hud`, `logo` e `emblem`.
+
 ## Estrutura prevista
 
 ```text
