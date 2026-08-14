@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from tehkne_assets_forge.hoc_landmarks import HocLandmarkError, validate_hoc_landmark_manifest
+from tehkne_assets_forge.hoc_landmarks import HocLandmarkError, validate_hoc_landmark_candidate, validate_hoc_landmark_manifest
 
 
 def write_manifest(root: Path, assets: list[dict[str, str]]) -> Path:
@@ -31,6 +31,29 @@ def required_assets() -> list[dict[str, str]]:
     ]
 
 
+def test_hoc_landmark_candidate_accepts_city_alone(tmp_path: Path) -> None:
+    art = tmp_path / "art"
+    art.mkdir()
+    (art / "city-neutral.png").write_bytes(b"city")
+    result = validate_hoc_landmark_candidate(write_manifest(tmp_path, [required_assets()[0]]), root=tmp_path)
+    assert result["valid"] is True
+    assert result["mode"] == "candidate"
+    assert result["asset_id"] == "LANDMARK_CITY_NEUTRAL_01"
+
+
+def test_hoc_landmark_candidate_accepts_mine_alone(tmp_path: Path) -> None:
+    art = tmp_path / "art"
+    art.mkdir()
+    (art / "mine-neutral.png").write_bytes(b"mine")
+    result = validate_hoc_landmark_candidate(write_manifest(tmp_path, [required_assets()[1]]), root=tmp_path)
+    assert result["asset_id"] == "LANDMARK_MINE_NEUTRAL_01"
+
+
+def test_hoc_landmark_candidate_rejects_pair(tmp_path: Path) -> None:
+    with pytest.raises(HocLandmarkError, match="exactly one asset"):
+        validate_hoc_landmark_candidate(write_manifest(tmp_path, required_assets()))
+
+
 def test_hoc_landmark_manifest_accepts_required_neutral_pair(tmp_path: Path) -> None:
     art = tmp_path / "art"
     art.mkdir()
@@ -38,6 +61,7 @@ def test_hoc_landmark_manifest_accepts_required_neutral_pair(tmp_path: Path) -> 
     (art / "mine-neutral.png").write_bytes(b"mine")
     result = validate_hoc_landmark_manifest(write_manifest(tmp_path, required_assets()), root=tmp_path)
     assert result["valid"] is True
+    assert result["mode"] == "package"
     assert result["asset_count"] == 2
 
 
