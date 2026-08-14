@@ -7,7 +7,7 @@ from pathlib import Path
 from . import __version__
 from .budget import AssetBudget, evaluate_budget, scan_disk_metrics
 from .checksums import ChecksumError, sha256_file, verify_sha256
-from .hoc_landmarks import HocLandmarkError, validate_hoc_landmark_manifest
+from .hoc_landmarks import HocLandmarkError, validate_hoc_landmark_candidate, validate_hoc_landmark_manifest
 from .intake import IntakeError, extract_zip_intake
 
 
@@ -19,9 +19,20 @@ def build_parser() -> argparse.ArgumentParser:
     validate = sub.add_parser("validate-catalog", help="Valida um catálogo de packs.")
     validate.add_argument("catalog", type=Path)
 
+    hoc_candidate = sub.add_parser(
+        "validate-hoc-landmark-candidate",
+        help="Valida um candidato HOC world-space City ou Mine isoladamente.",
+    )
+    hoc_candidate.add_argument("manifest", type=Path)
+    hoc_candidate.add_argument(
+        "--root",
+        type=Path,
+        help="Raiz do candidato para exigir que o arquivo renderizável exista e não esteja vazio.",
+    )
+
     hoc_landmarks = sub.add_parser(
         "validate-hoc-landmarks",
-        help="Valida o contrato HOC de landmarks world-space City + Mine.",
+        help="Valida o contrato final HOC de landmarks world-space City + Mine.",
     )
     hoc_landmarks.add_argument("manifest", type=Path)
     hoc_landmarks.add_argument(
@@ -75,6 +86,8 @@ def validate_catalog(path: Path) -> dict[str, object]:
 def run(args: argparse.Namespace) -> tuple[int, dict[str, object]]:
     if args.command == "validate-catalog":
         return 0, validate_catalog(args.catalog)
+    if args.command == "validate-hoc-landmark-candidate":
+        return 0, validate_hoc_landmark_candidate(args.manifest, root=args.root)
     if args.command == "validate-hoc-landmarks":
         return 0, validate_hoc_landmark_manifest(args.manifest, root=args.root)
     if args.command == "checksum":
