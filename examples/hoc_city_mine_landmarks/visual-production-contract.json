@@ -1,0 +1,113 @@
+{
+  "schema": "hoc/world-landmark-visual-production/v1",
+  "project": "Hexa Octarina Conquer",
+  "package": "HOC_PACK_99_LANDMARK_CITY_MINE_EXTENSION_v1.0.0",
+  "signature": "Tehkné Solutions",
+  "reference_status": "concept-direction-only",
+  "global": {
+    "render_role": "physical-world-space-landmark",
+    "projection": "three-quarter isometric strategic-map perspective compatible with current Fortress, Bridge and Octarina",
+    "background": "transparent",
+    "baked_text": false,
+    "ui_treatment": false,
+    "silhouette_priority": "high",
+    "gameplay_readability": [
+      "1366x768 desktop Living Map",
+      "390x844 portrait Living Map"
+    ],
+    "forbidden_semantics": [
+      "icon",
+      "badge",
+      "marker",
+      "portrait",
+      "card",
+      "button",
+      "frame",
+      "hud",
+      "logo",
+      "emblem",
+      "camp substitute",
+      "citadel substitute",
+      "tower substitute",
+      "rocks substitute"
+    ],
+    "variant_rule": "Faction/damage variants must preserve the approved neutral landmark silhouette and footprint; variants may alter banners, materials, damage state and faction accents, but must not become different structures.",
+    "art_language": "premium medieval-fantasy strategic-map world art; authored physical object, not app UI; strong material definition; restrained effects; no glow-heavy tech styling"
+  },
+  "city": {
+    "canonical_neutral_id": "LANDMARK_CITY_NEUTRAL_01",
+    "required_read": "a real settlement/city cluster and inhabited place",
+    "silhouette": {
+      "mass_count_target": "6-12 distinguishable architectural masses",
+      "hierarchy": "one civic focal building plus smaller houses/workshops around streets or a small plaza",
+      "footprint": "broad and clustered rather than tall and singular",
+      "avoid": [
+        "single tower",
+        "dominant citadel silhouette",
+        "military fortress read",
+        "temporary camp",
+        "single isolated house"
+      ]
+    },
+    "authored_details": [
+      "multiple roofs/buildings",
+      "visible street/plaza logic",
+      "small market/workshop cues",
+      "vegetation or small perimeter dressing integrated into the footprint",
+      "clear ground contact and entrance direction"
+    ],
+    "neutral_palette": "warm stone, timber and restrained roof variation; no dominant blue/red faction coding",
+    "preferred_variants": [
+      "LANDMARK_CITY_BLUE_01",
+      "LANDMARK_CITY_RED_01",
+      "LANDMARK_CITY_DAMAGED_01"
+    ]
+  },
+  "mine": {
+    "canonical_neutral_id": "LANDMARK_MINE_NEUTRAL_01",
+    "required_read": "a constructed extraction site with a usable mine entrance",
+    "silhouette": {
+      "hierarchy": "dark mine portal embedded in terrain plus timber/stone extraction structures",
+      "footprint": "compact industrial landmark with horizontal extraction cues",
+      "avoid": [
+        "loose rock pile",
+        "generic cave hole",
+        "ore/resource icon",
+        "mountain-only silhouette",
+        "fortress or house read"
+      ]
+    },
+    "authored_details": [
+      "supported entrance/portal",
+      "timber beams or stone retaining structure",
+      "short rail or cart track",
+      "winch/pulley/crane or ore-cart cue",
+      "excavated ground/rock face integrated into the footprint"
+    ],
+    "neutral_palette": "stone, timber, iron and earth; no dominant blue/red faction coding",
+    "preferred_variants": [
+      "LANDMARK_MINE_BLUE_01",
+      "LANDMARK_MINE_RED_01",
+      "LANDMARK_MINE_DEPLETED_01"
+    ]
+  },
+  "review_gate": {
+    "neutral_first": true,
+    "required_before_variants": [
+      "City neutral silhouette approved at gameplay scale",
+      "Mine neutral silhouette approved at gameplay scale",
+      "both assets have transparent world-space renders",
+      "both pass tehkne-assets-forge validate-hoc-landmarks",
+      "no semantic substitute or UI-like treatment"
+    ],
+    "final_hoc_acceptance": [
+      "successor PACK runtime registry contains canonical IDs",
+      "zero unresolved references",
+      "Living Map resolves City and Mine without query hacks",
+      "Fortress, Bridge and Octarina remain unchanged",
+      "desktop 1366x768 Golden Screen human-approved",
+      "portrait 390x844 Golden Screen human-approved",
+      "64-cell q/r topology preserved"
+    ]
+  }
+}
