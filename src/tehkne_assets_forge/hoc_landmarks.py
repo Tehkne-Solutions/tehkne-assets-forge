@@ -42,6 +42,70 @@ def _read_manifest(path: Path) -> dict[str, Any]:
     return data
 
 
+def _validate_asset(asset: Any, *, index: int, root: Path | None = None) -> str:
+    if not isinstance(asset, dict):
+        raise HocLandmarkError(f"asset #{index} must be an object")
+    asset_id = asset.get("id")
+    role = asset.get("role")
+    file_value = asset.get("file")
+    if not isinstance(asset_id, str) or not asset_id:
+        raise HocLandmarkError(f"asset #{index} has no canonical id")
+    if role not in {"city", "mine"}:
+        raise HocLandmarkError(f"{asset_id}: role must be city or mine")
+    if not isinstance(file_value, str) or not file_value:
+        raise HocLandmarkError(f"{asset_id}: file is required")
+
+    forbidden = sorted(_tokens(" ".join((asset_id, role, file_value))) & FORBIDDEN_TOKENS)
+    if forbidden:
+        raise HocLandmarkError(f"{asset_id}: forbidden world-space semantics: {', '.join(forbidden)}")
+
+    suffix = Path(file_value).suffix.lower()
+    if suffix not in ALLOWED_EXTENSIONS:
+        raise HocLandmarkError(f"{asset_id}: unsupported renderable extension {suffix!r}")
+
+    if asset_id.startswith("LANDMARK_CITY_") and role != "city":
+        raise HocLandmarkError(f"{asset_id}: canonical family/role mismatch")
+    if asset_id.startswith("LANDMARK_MINE_") and role != "mine":
+        raise HocLandmarkError(f"{asset_id}: canonical family/role mismatch")
+    if not asset_id.startswith(("LANDMARK_CITY_", "LANDMARK_MINE_")):
+        raise HocLandmarkError(f"{asset_id}: unsupported canonical landmark family")
+
+    if root is not None:
+        candidate = (root / file_value).resolve()
+        root_resolved = root.resolve()
+        if candidate != root_resolved and root_resolved not in candidate.parents:
+            raise HocLandmarkError(f"{asset_id}: file escapes package root")
+        if not candidate.is_file() or candidate.stat().st_size == 0:
+            raise HocLandmarkError(f"{asset_id}: renderable file is missing or empty")
+
+    return asset_id
+
+
+def validate_hoc_landmark_candidate(path: Path, *, root: Path | None = None) -> dict[str, Any]:
+    data = _read_manifest(path)
+    if data.get("schema") != SCHEMA:
+        raise HocLandmarkError(f"unsupported schema: {data.get('schema')!r}")
+    if data.get("project") != "Hexa Octarina Conquer":
+        raise HocLandmarkError("project must be 'Hexa Octarina Conquer'")
+    if data.get("signature") != SIGNATURE:
+        raise HocLandmarkError("invalid institutional signature")
+
+    assets = data.get("assets")
+    if not isinstance(assets, list) or len(assets) != 1:
+        raise HocLandmarkError("candidate manifest must contain exactly one asset")
+
+    asset_id = _validate_asset(assets[0], index=0, root=root)
+    return {
+        "valid": True,
+        "mode": "candidate",
+        "schema": SCHEMA,
+        "project": "Hexa Octarina Conquer",
+        "asset_count": 1,
+        "asset_id": asset_id,
+        "signature": SIGNATURE,
+    }
+
+
 def validate_hoc_landmark_manifest(path: Path, *, root: Path | None = None) -> dict[str, Any]:
     data = _read_manifest(path)
     if data.get("schema") != SCHEMA:
@@ -55,44 +119,7 @@ def validate_hoc_landmark_manifest(path: Path, *, root: Path | None = None) -> d
     if not isinstance(assets, list):
         raise HocLandmarkError("assets must be a list")
 
-    ids: list[str] = []
-    for index, asset in enumerate(assets):
-        if not isinstance(asset, dict):
-            raise HocLandmarkError(f"asset #{index} must be an object")
-        asset_id = asset.get("id")
-        role = asset.get("role")
-        file_value = asset.get("file")
-        if not isinstance(asset_id, str) or not asset_id:
-            raise HocLandmarkError(f"asset #{index} has no canonical id")
-        if role not in {"city", "mine"}:
-            raise HocLandmarkError(f"{asset_id}: role must be city or mine")
-        if not isinstance(file_value, str) or not file_value:
-            raise HocLandmarkError(f"{asset_id}: file is required")
-
-        forbidden = sorted(_tokens(" ".join((asset_id, role, file_value))) & FORBIDDEN_TOKENS)
-        if forbidden:
-            raise HocLandmarkError(f"{asset_id}: forbidden world-space semantics: {', '.join(forbidden)}")
-
-        suffix = Path(file_value).suffix.lower()
-        if suffix not in ALLOWED_EXTENSIONS:
-            raise HocLandmarkError(f"{asset_id}: unsupported renderable extension {suffix!r}")
-
-        if asset_id.startswith("LANDMARK_CITY_") and role != "city":
-            raise HocLandmarkError(f"{asset_id}: canonical family/role mismatch")
-        if asset_id.startswith("LANDMARK_MINE_") and role != "mine":
-            raise HocLandmarkError(f"{asset_id}: canonical family/role mismatch")
-        if not asset_id.startswith(("LANDMARK_CITY_", "LANDMARK_MINE_")):
-            raise HocLandmarkError(f"{asset_id}: unsupported canonical landmark family")
-
-        if root is not None:
-            candidate = (root / file_value).resolve()
-            root_resolved = root.resolve()
-            if candidate != root_resolved and root_resolved not in candidate.parents:
-                raise HocLandmarkError(f"{asset_id}: file escapes package root")
-            if not candidate.is_file() or candidate.stat().st_size == 0:
-                raise HocLandmarkError(f"{asset_id}: renderable file is missing or empty")
-
-        ids.append(asset_id)
+    ids = [_validate_asset(asset, index=index, root=root) for index, asset in enumerate(assets)]
 
     if len(ids) != len(set(ids)):
         raise HocLandmarkError("duplicate canonical landmark ids")
@@ -103,6 +130,7 @@ def validate_hoc_landmark_manifest(path: Path, *, root: Path | None = None) -> d
 
     return {
         "valid": True,
+        "mode": "package",
         "schema": SCHEMA,
         "project": "Hexa Octarina Conquer",
         "asset_count": len(ids),
