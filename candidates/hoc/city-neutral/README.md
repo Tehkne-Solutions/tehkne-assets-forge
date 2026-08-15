@@ -1,10 +1,10 @@
 # HOC — LANDMARK_CITY_NEUTRAL_01
 
-Status: **CANDIDATE A FROZEN — BINARY MATERIALIZATION ONLY**
+Status: **CANDIDATE A FROZEN — NEUTRAL BINARY MATERIALIZATION ONLY**
 
 This candidate is the production gate for Tehkné Assets Forge issue #6 and Hexa Octarina Conquer #413.
 
-The exploration/concept sheets are references only. Candidate A is now frozen: no further City generation is allowed unless the HOC gameplay-scale review explicitly rejects this exact asset.
+The exploration/concept sheets are references only. Candidate A is frozen: no further City generation is allowed unless the HOC gameplay-scale review explicitly rejects this exact asset.
 
 ## Canonical Candidate A
 
@@ -15,15 +15,16 @@ The exploration/concept sheets are references only. Candidate A is now frozen: n
 - nontransparent bbox (`alpha > 20`): `64,673 → 1984,1984`;
 - bottom margin: `64 px`;
 - pivot contract: bottom-center;
-- exact PNG SHA-256: `5af95fbb0fe03ab722c4267b37cf675cf9f9a5d9b0be41bf881e736aa9c37cdc`;
-- exact PNG size: `4,037,330 bytes`;
+- exact neutral PNG SHA-256: `18f4b6df860fcfe46f37e7c51ee8f1c03ea6de2a9ed37ad83de222deb8bb881b`;
+- exact neutral PNG size: `4,052,562 bytes`;
 - no baked board text, UI, badge, marker, frame, logo or HUD treatment;
+- no Blue/Red faction coding in roofs, banners or standards;
 - broad inhabited footprint with civic center, multiple homes/workshops, market, farm, windmill and streets;
 - semantic review: reads as population/economy/civilization rather than a single fortress, tower or camp.
 
 ## Forge candidate validation
 
-The frozen Candidate A package passes the same fail-closed contract implemented on `main`:
+The frozen Candidate A package is expected to pass the fail-closed candidate contract on `main` once the exact binary is physically present:
 
 ```json
 {
@@ -47,7 +48,7 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
 
 ## Remaining gate
 
-The exact generated binary and a deterministic Forge intake ZIP have been produced outside the repository. The connected GitHub tool available in this session does not expose a local-file binary upload parameter, so this PR remains fail-closed until the exact PNG above is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and CI validates that exact SHA.
+The exact neutral binary has been produced and preserved outside the repository. The PR remains fail-closed until that exact PNG is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and CI validates the file against the checksum above.
 
 This is a **binary materialization blocker only**. Do not generate another City, do not start BLUE/RED/DAMAGED variants, and do not integrate City into HOC runtime before that gate is satisfied.
 
