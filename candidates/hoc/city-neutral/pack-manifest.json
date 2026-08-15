@@ -1,0 +1,12 @@
+{
+  "schema": "hoc/world-landmarks/v1",
+  "project": "Hexa Octarina Conquer",
+  "signature": "Tehkné Solutions",
+  "assets": [
+    {
+      "id": "LANDMARK_CITY_NEUTRAL_01",
+      "role": "city",
+      "file": "art/LANDMARK_CITY_NEUTRAL_01.png"
+    }
+  ]
+}
