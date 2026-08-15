@@ -47,7 +47,7 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
 
 ## Remaining gate
 
-The generated binary exists and is frozen, but the connected GitHub tool available in this session does not expose a local-file binary upload parameter. The PR therefore remains fail-closed until the exact PNG above is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and CI validates that exact SHA.
+The exact generated binary and a deterministic Forge intake ZIP have been produced outside the repository. The connected GitHub tool available in this session does not expose a local-file binary upload parameter, so this PR remains fail-closed until the exact PNG above is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and CI validates that exact SHA.
 
 This is a **binary materialization blocker only**. Do not generate another City, do not start BLUE/RED/DAMAGED variants, and do not integrate City into HOC runtime before that gate is satisfied.
 
