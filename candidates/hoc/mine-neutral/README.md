@@ -1,46 +1,52 @@
 # HOC — LANDMARK_MINE_NEUTRAL_01
 
-Status: **FAIL-CLOSED PRODUCTION GATE — ASSET NOT MATERIALIZED**
+Status: **CANDIDATE A FROZEN — BINARY MATERIALIZATION ONLY**
 
 This candidate is the production gate for Tehkné Assets Forge issue #7 and Hexa Octarina Conquer #413.
 
-## Canonical output
+The generated presentation sheet is not an asset and is excluded from production. The isolated Mine render is Candidate A and is now frozen: no further Mine generation is allowed unless the HOC gameplay-scale review explicitly rejects this exact asset.
+
+## Canonical Candidate A
 
 - canonical ID: `LANDMARK_MINE_NEUTRAL_01`;
+- family: `WORLD_LANDMARKS / EXTRACTION / MINE`;
 - canonical path: `art/LANDMARK_MINE_NEUTRAL_01.png`;
-- isolated world-space PNG with transparent background;
-- neutral stone/timber/iron/earth palette;
-- no baked text, UI, marker, badge, frame or faction coding;
-- bottom-center pivot staging;
-- authored silhouette must remain legible at HOC gameplay scale.
+- normalized canvas: `2048 × 2048` RGBA;
+- source composition preserved; no redraw or alternate Mine generated;
+- nontransparent bbox (`alpha > 20`): `64,544 → 1984,1984`;
+- bottom margin: `64 px`;
+- horizontal safety margins: `64 px`;
+- pivot contract: bottom-center;
+- exact PNG SHA-256: `9014411a8c81b89adc3c4ba52b5a3fafd4ad925c7033699c5590e94d36749069`;
+- exact PNG size: `4,524,328 bytes`;
+- fully transparent canvas coverage: `57.2248%`;
+- neutral stone/timber/iron/earth palette with no Blue/Red ownership coding;
+- no baked text, UI, marker, badge, frame, logo or HUD treatment.
 
-## Locked semantic contract
+## Semantic result
 
-The Mine must read as a **constructed extraction site**, not as a mountain, rock pile or resource icon.
+Candidate A reads as a **constructed extraction installation** through a combined authored silhouette:
 
-Required authored cues:
+1. reinforced mine portal embedded in rock;
+2. timber retaining structure and visible supports;
+3. rail network entering/leaving the portal;
+4. multiple ore carts;
+5. crane/winch extraction machinery;
+6. forge/workshop and operational support structures;
+7. excavated earth/rock integrated into the industrial footprint;
+8. lookout/operations tower and storage cues.
 
-1. dark mine portal embedded in excavated terrain;
-2. timber/stone retaining structure around the portal;
-3. visible support beams;
-4. short rail/cart track or extraction path leaving the entrance;
-5. winch, pulley, crane or ore-cart extraction cue;
-6. excavated rock/earth footprint integrated into the installation;
-7. enough asymmetry and industrial construction to remain distinct from Fortress and City.
+It is intentionally distinct from City, Fortress, mountain-only terrain, loose rocks and resource icons.
 
-Forbidden readings:
+## Where it is applied
 
-- loose rocks only;
-- generic cave hole;
-- mountain-only silhouette;
-- ore/resource icon;
-- house, city or fortress;
-- Blue/Red ownership colors;
-- UI icon/card/marker.
+This landmark is intended for HOC2 Living Map territories whose semantic role is `mine`. It replaces generic `rocks`, `mountain`, `cave`, `ore icon` and other fallback readings once promoted into the successor PACK and integrated into runtime.
 
-## Candidate gate
+Gameplay role: extraction/economy territory, mining-resource generation, capture/defense objectives, crafting/build progression and strategic resource routes.
 
-The PR must remain fail-closed until the exact PNG exists and passes:
+## Forge candidate validation
+
+The PR remains fail-closed until this exact PNG is physically present and passes:
 
 ```bash
 tehkne-assets-forge validate-hoc-landmark-candidate \
@@ -48,8 +54,6 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
   --root candidates/hoc/mine-neutral
 ```
 
-After structural validation, perform one gameplay-scale review at desktop 1366×768 and portrait 390×844. If it passes, freeze the candidate; do not generate iterative concept sheets or faction variants before approval.
-
-The final City+Mine package remains blocked until both neutral candidates are physically materialized and individually approved.
+After structural validation, perform one gameplay-scale review at desktop 1366×768 and portrait 390×844. If it passes, close Mine and proceed to the City+Mine package; do not generate BLUE/RED/DEPLETED variants yet.
 
 **Tehkné Solutions**
