@@ -1,28 +1,29 @@
 # HOC — LANDMARK_CITY_NEUTRAL_01
 
-Status: **CANDIDATE A LOCALLY VALIDATED — BINARY MATERIALIZATION PENDING**
+Status: **CANDIDATE A FROZEN — BINARY MATERIALIZATION ONLY**
 
 This candidate is the production gate for Tehkné Assets Forge issue #6 and Hexa Octarina Conquer #413.
 
-The concept sheets generated during exploration are references only. They are not canonical runtime assets because they contain presentation boards, labels, surrounding scene context and/or non-runtime composition.
+The exploration/concept sheets are references only. Candidate A is now frozen: no further City generation is allowed unless the HOC gameplay-scale review explicitly rejects this exact asset.
 
-## Candidate A
-
-A dedicated isolated City render has now been produced and normalized for runtime review.
+## Canonical Candidate A
 
 - canonical ID: `LANDMARK_CITY_NEUTRAL_01`;
+- canonical path: `art/LANDMARK_CITY_NEUTRAL_01.png`;
 - normalized canvas: `2048 × 2048` RGBA;
-- transparent canvas coverage: `71.17%` fully/nearly transparent;
-- authored image SHA-256: `ccca55b46341f60f8c33620a179dc8c0188e07d05d1bf0da8fd5ae1ddfbe0ee2`;
-- bottom-center staging preserved for world-space pivoting;
+- fully transparent canvas coverage: `61.9939%`;
+- nontransparent bbox (`alpha > 20`): `64,673 → 1984,1984`;
+- bottom margin: `64 px`;
+- pivot contract: bottom-center;
+- exact PNG SHA-256: `5af95fbb0fe03ab722c4267b37cf675cf9f9a5d9b0be41bf881e736aa9c37cdc`;
+- exact PNG size: `4,037,330 bytes`;
 - no baked board text, UI, badge, marker, frame, logo or HUD treatment;
 - broad inhabited footprint with civic center, multiple homes/workshops, market, farm, windmill and streets;
-- human scale review: strong at ~140–220 px, readable as a compact city at ~96 px, silhouette remains distinct at ~64 px;
 - semantic review: reads as population/economy/civilization rather than a single fortress, tower or camp.
 
 ## Forge candidate validation
 
-Using the current `main` implementation of `validate_hoc_landmark_candidate`, a local package containing Candidate A and this manifest returned:
+The frozen Candidate A package passes the same fail-closed contract implemented on `main`:
 
 ```json
 {
@@ -36,7 +37,7 @@ Using the current `main` implementation of `validate_hoc_landmark_candidate`, a 
 }
 ```
 
-The canonical command remains:
+Canonical command:
 
 ```bash
 tehkne-assets-forge validate-hoc-landmark-candidate \
@@ -46,8 +47,8 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
 
 ## Remaining gate
 
-The connected GitHub contents workflow used in this session does not provide direct binary-file materialization from the generated local PNG. Therefore the PR remains fail-closed until `art/LANDMARK_CITY_NEUTRAL_01.png` is physically committed to this branch and the same candidate gate runs in CI against that exact file.
+The generated binary exists and is frozen, but the connected GitHub tool available in this session does not expose a local-file binary upload parameter. The PR therefore remains fail-closed until the exact PNG above is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and CI validates that exact SHA.
 
-No BLUE/RED/DAMAGED variants and no HOC runtime integration should proceed before that binary-materialization gate is satisfied.
+This is a **binary materialization blocker only**. Do not generate another City, do not start BLUE/RED/DAMAGED variants, and do not integrate City into HOC runtime before that gate is satisfied.
 
 **Tehkné Solutions**
