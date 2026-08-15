@@ -1,0 +1,40 @@
+{
+  "valid": true,
+  "mode": "candidate",
+  "schema": "hoc/world-landmarks/v1",
+  "project": "Hexa Octarina Conquer",
+  "asset_count": 1,
+  "asset_id": "LANDMARK_MINE_NEUTRAL_01",
+  "signature": "Tehkné Solutions",
+  "renderable": {
+    "format": "PNG",
+    "mode": "RGBA",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 4524328,
+    "sha256": "9014411a8c81b89adc3c4ba52b5a3fafd4ad925c7033699c5590e94d36749069",
+    "fully_transparent_fraction": 0.572248,
+    "near_transparent_fraction_lt_10": 0.582508,
+    "nontransparent_bbox_alpha_gt_20": [64, 544, 1984, 1984],
+    "pivot_contract": "bottom-center",
+    "bottom_margin_px": 64
+  },
+  "semantic_review": {
+    "family": "WORLD_LANDMARKS / EXTRACTION / MINE",
+    "reads_as": ["mine", "constructed extraction site", "industrial extraction", "resource territory"],
+    "distinct_from": ["city", "fortress", "mountain-only terrain", "rock pile", "resource icon", "ui-marker"],
+    "faction_encoding": "neutral",
+    "candidate_state": "frozen",
+    "authored_features": [
+      "reinforced portal",
+      "timber supports",
+      "rail network",
+      "ore carts",
+      "crane and winch",
+      "forge workshop",
+      "operations tower",
+      "storage and excavated footprint"
+    ]
+  },
+  "remaining_gate": "commit exact PNG binary and validate exact candidate in CI"
+}
