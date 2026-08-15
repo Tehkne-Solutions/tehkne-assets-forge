@@ -1,0 +1,28 @@
+{
+  "valid": true,
+  "mode": "candidate",
+  "schema": "hoc/world-landmarks/v1",
+  "project": "Hexa Octarina Conquer",
+  "asset_count": 1,
+  "asset_id": "LANDMARK_CITY_NEUTRAL_01",
+  "signature": "Tehkné Solutions",
+  "renderable": {
+    "format": "PNG",
+    "mode": "RGBA",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 4037330,
+    "sha256": "5af95fbb0fe03ab722c4267b37cf675cf9f9a5d9b0be41bf881e736aa9c37cdc",
+    "fully_transparent_fraction": 0.619939,
+    "near_transparent_fraction_lt_10": 0.622139,
+    "nontransparent_bbox_alpha_gt_20": [64, 673, 1984, 1984],
+    "pivot_contract": "bottom-center",
+    "bottom_margin_px": 64
+  },
+  "semantic_review": {
+    "reads_as": ["city", "settlement", "population", "economy", "civilization"],
+    "distinct_from": ["fortress", "tower", "camp", "mine", "ui-marker"],
+    "candidate_state": "frozen"
+  },
+  "remaining_gate": "commit exact PNG binary and validate exact SHA in CI"
+}
