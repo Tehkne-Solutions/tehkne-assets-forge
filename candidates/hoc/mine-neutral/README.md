@@ -12,14 +12,13 @@ The generated presentation sheet is not an asset and is excluded from production
 - family: `WORLD_LANDMARKS / EXTRACTION / MINE`;
 - canonical path: `art/LANDMARK_MINE_NEUTRAL_01.png`;
 - normalized canvas: `2048 × 2048` RGBA;
-- source composition preserved; no redraw or alternate Mine generated;
+- fully transparent canvas coverage: `57.2248%`;
 - nontransparent bbox (`alpha > 20`): `64,544 → 1984,1984`;
 - bottom margin: `64 px`;
 - horizontal safety margins: `64 px`;
 - pivot contract: bottom-center;
 - exact PNG SHA-256: `9014411a8c81b89adc3c4ba52b5a3fafd4ad925c7033699c5590e94d36749069`;
 - exact PNG size: `4,524,328 bytes`;
-- fully transparent canvas coverage: `57.2248%`;
 - neutral stone/timber/iron/earth palette with no Blue/Red ownership coding;
 - no baked text, UI, marker, badge, frame, logo or HUD treatment.
 
@@ -55,5 +54,15 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
 ```
 
 After structural validation, perform one gameplay-scale review at desktop 1366×768 and portrait 390×844. If it passes, close Mine and proceed to the City+Mine package; do not generate BLUE/RED/DEPLETED variants yet.
+
+## Production state
+
+- composition: complete;
+- neutral visual language: complete;
+- 2048×2048 runtime normalization: complete;
+- checksum/validation metadata: complete;
+- physical PNG commit: pending;
+- Forge CI against physical binary: pending;
+- HOC2 runtime integration: blocked until City+Mine package promotion.
 
 **Tehkné Solutions**
