@@ -43,22 +43,7 @@ jobs:
               exit 1
             }
 
-            asset_rel="$(python - "$manifest" <<'PY'
-import json
-import sys
-from pathlib import Path
-p = Path(sys.argv[1])
-data = json.loads(p.read_text(encoding='utf-8'))
-assets = data.get('assets') or []
-if len(assets) != 1:
-    raise SystemExit(f'candidate manifest must contain exactly one asset, got {len(assets)}')
-asset = assets[0]
-path = asset.get('file')
-if not path:
-    raise SystemExit('candidate manifest asset has no file path')
-print(path)
-PY
-)"
+            asset_rel="$(python -c 'import json,sys; d=json.load(open(sys.argv[1], encoding="utf-8")); a=d.get("assets") or []; len(a)==1 or (_ for _ in ()).throw(SystemExit(f"candidate manifest must contain exactly one asset, got {len(a)}")); p=a[0].get("file"); p or (_ for _ in ()).throw(SystemExit("candidate manifest asset has no file path")); print(p)' "$manifest")"
 
             test -f "$root/$asset_rel" || {
               echo "Missing canonical candidate binary: $root/$asset_rel" >&2
