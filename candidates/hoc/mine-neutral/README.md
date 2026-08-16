@@ -53,6 +53,10 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
   --root candidates/hoc/mine-neutral
 ```
 
+## Permanent binary gate
+
+`main` now contains `HOC Landmark Candidate Gate` (Forge #11 / `802042005a09…`). Any PR touching `candidates/hoc/**` must physically contain its canonical asset, match `SHA256SUMS.txt`, and pass `validate-hoc-landmark-candidate`. A generic green CI no longer counts as candidate completion.
+
 After structural validation, perform one gameplay-scale review at desktop 1366×768 and portrait 390×844. If it passes, close Mine and proceed to the City+Mine package; do not generate BLUE/RED/DEPLETED variants yet.
 
 ## Production state
@@ -62,7 +66,7 @@ After structural validation, perform one gameplay-scale review at desktop 1366×
 - 2048×2048 runtime normalization: complete;
 - checksum/validation metadata: complete;
 - physical PNG commit: pending;
-- Forge CI against physical binary: pending;
+- permanent Forge candidate gate against physical binary: pending;
 - HOC2 runtime integration: blocked until City+Mine package promotion.
 
 **Tehkné Solutions**
