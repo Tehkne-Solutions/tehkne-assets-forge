@@ -1,6 +1,6 @@
 # HOC — LANDMARK_MINE_NEUTRAL_01
 
-Status: **CANDIDATE A FROZEN — RUNTIME BINARY MATERIALIZATION ONLY**
+Status: **CANDIDATE A FROZEN — RUNTIME MATERIALIZED**
 
 This candidate is the production gate for Tehkné Assets Forge issue #7 and Hexa Octarina Conquer #413.
 
@@ -26,13 +26,13 @@ The master remains the high-fidelity source artifact and is not regenerated.
 
 ## Canonical runtime representation
 
-The same frozen artwork is deterministically optimized for map delivery:
+The same frozen artwork is deterministically optimized for map delivery and is now physically materialized in this PR:
 
 - `512 × 512` indexed PNG (`P`, 64-color optimized palette);
 - SHA-256: `4398f8d96c1bfb50d89a34717f4ce18a5ad69140864dec99eb814d7e3d9b00c4`;
 - size: `48,099 bytes`;
 - bottom-center composition preserved;
-- current `LivingMap` displays landmark art at `96 × 96`, so this runtime retains more than 5× source resolution headroom;
+- current `LivingMap` displays landmark art at `96 × 96`, so this runtime retains more than 5× source-resolution headroom;
 - mean absolute visual delta versus the RGBA master remains approximately `2.46–3.07 / 255` across 64–220 px review sizes.
 
 This master/runtime split is intentional: source fidelity remains in the 2048px master; the repository and game ship the appropriately sized runtime asset.
@@ -45,15 +45,13 @@ After promotion it replaces generic `rocks`, `mountain`, `cave` and `ore icon` f
 
 ## Permanent Forge gate
 
-`main` contains `HOC Landmark Candidate Gate` (Forge #11 / `802042005a09…`). The candidate must physically contain the exact runtime PNG above, match `SHA256SUMS.txt`, and pass:
+`main` contains `HOC Landmark Candidate Gate` (Forge #11 / `802042005a09…`). This PR now physically contains the runtime PNG and `SHA256SUMS.txt` is locked to its exact bytes. The permanent gate must pass:
 
 ```bash
 tehkne-assets-forge validate-hoc-landmark-candidate \
   candidates/hoc/mine-neutral/pack-manifest.json \
   --root candidates/hoc/mine-neutral
 ```
-
-The current red candidate gate is truthful and expected until the exact runtime PNG is committed. Generic CI alone does not count as completion.
 
 After the binary gate passes, perform one gameplay-scale review at desktop `1366×768` and portrait `390×844`. If it passes, close Mine and proceed to the City+Mine package; do not generate BLUE/RED/DEPLETED variants yet.
 
