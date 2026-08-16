@@ -39,5 +39,6 @@
     "candidate_state": "frozen",
     "authored_features": ["reinforced portal", "timber supports", "rail network", "ore carts", "crane and winch", "forge workshop", "operations tower", "storage and excavated footprint"]
   },
-  "remaining_gate": "commit exact 512px optimized runtime PNG and pass permanent HOC candidate binary gate"
+  "binary_materialization": "complete",
+  "remaining_gate": "permanent HOC candidate binary gate plus gameplay-scale desktop/portrait review"
 }
