@@ -1,0 +1,75 @@
+name: Materialize HOC City Neutral Runtime
+
+on:
+  push:
+    branches:
+      - agent/hoc-city-neutral-candidate
+    paths:
+      - 'candidates/hoc/city-neutral/.materialize/runtime384safe/**'
+      - '.github/workflows/materialize-city-neutral.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check complete deterministic transport
+        id: ready
+        shell: bash
+        run: |
+          set -euo pipefail
+          root='candidates/hoc/city-neutral/.materialize/runtime384safe'
+          for i in $(seq -w 0 29); do
+            test -f "$root/part-$i.hex" || {
+              echo "ready=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            }
+          done
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Materialize exact City runtime
+        if: steps.ready.outputs.ready == 'true'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          set -euo pipefail
+          root='candidates/hoc/city-neutral'
+          transport="$root/.materialize/runtime384safe"
+          mkdir -p "$root/art"
+          cat "$transport"/part-*.hex | xxd -r -p > "$root/art/LANDMARK_CITY_NEUTRAL_01.png"
+
+          file="$root/art/LANDMARK_CITY_NEUTRAL_01.png"
+          test "$(stat -c%s "$file")" = '30503'
+          echo '9c0b521e0ee001a307c051d33540aa73022d91561ce5aadbe7a6b0acfdbf2dd3  candidates/hoc/city-neutral/art/LANDMARK_CITY_NEUTRAL_01.png' | sha256sum -c -
+
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('candidates/hoc/city-neutral/art/LANDMARK_CITY_NEUTRAL_01.png')
+          b=p.read_bytes()
+          assert b[:8] == b'\x89PNG\r\n\x1a\n'
+          assert int.from_bytes(b[16:20], 'big') == 384
+          assert int.from_bytes(b[20:24], 'big') == 384
+          print('CITY_RUNTIME_OK', p.stat().st_size)
+          PY
+
+          PYTHONPATH=src python -m tehkne_assets_forge.cli validate-hoc-landmark-candidate "$root/pack-manifest.json" --root "$root"
+
+      - name: Commit clean materialized candidate
+        if: steps.ready.outputs.ready == 'true' && success()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf candidates/hoc/city-neutral/.materialize
+          rm -f .github/workflows/materialize-city-neutral.yml
+          git config user.name 'tehkne-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat(hoc): materialize City Candidate A runtime'
+          git push
