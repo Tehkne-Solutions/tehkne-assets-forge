@@ -6,6 +6,7 @@ on:
       - agent/hoc-mine-neutral-candidate
     paths:
       - 'candidates/hoc/mine-neutral/.materialize/runtime512/**'
+      - '.github/workflows/materialize-mine-neutral.yml'
 
 permissions:
   contents: write
@@ -37,29 +38,45 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Materialize exact Mine runtime
+      - name: Reconstruct Mine runtime for audit
         if: steps.ready.outputs.ready == 'true'
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p candidates/hoc/mine-neutral/art
           cat candidates/hoc/mine-neutral/.materialize/runtime512/part-*.b64 | base64 -d > candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png
-          test "$(stat -c%s candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png)" = "48099"
-          echo '4398f8d96c1bfb50d89a34717f4ce18a5ad69140864dec99eb814d7e3d9b00c4  candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png' | sha256sum -c -
+          echo "MINE_RUNTIME_BYTES=$(stat -c%s candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png)"
+          echo "MINE_RUNTIME_SHA256=$(sha256sum candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png | awk '{print $1}')"
           python - <<'PY'
           from pathlib import Path
           p=Path('candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png')
           b=p.read_bytes()
           assert b[:8] == b'\x89PNG\r\n\x1a\n'
-          assert int.from_bytes(b[16:20], 'big') == 512
-          assert int.from_bytes(b[20:24], 'big') == 512
-          print('MINE_RUNTIME_OK', p.stat().st_size)
+          print('MINE_RUNTIME_DIMENSIONS', int.from_bytes(b[16:20], 'big'), int.from_bytes(b[20:24], 'big'))
           PY
+
+      - name: Upload reconstructed runtime audit artifact
+        if: steps.ready.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mine-runtime-reconstructed-audit
+          path: candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Enforce frozen runtime contract
+        if: steps.ready.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          file='candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png'
+          test "$(stat -c%s "$file")" = "48099"
+          echo '4398f8d96c1bfb50d89a34717f4ce18a5ad69140864dec99eb814d7e3d9b00c4  candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png' | sha256sum -c -
           python -m pip install -e .
           python -m tehkne_assets_forge.cli validate-hoc-landmark-candidate candidates/hoc/mine-neutral/pack-manifest.json --root candidates/hoc/mine-neutral
 
       - name: Commit clean materialized candidate
-        if: steps.ready.outputs.ready == 'true'
+        if: steps.ready.outputs.ready == 'true' && success()
         shell: bash
         run: |
           set -euo pipefail
