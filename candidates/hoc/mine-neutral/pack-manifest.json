@@ -1,0 +1,16 @@
+{
+  "schema": "hoc/world-landmarks/v1",
+  "project": "Hexa Octarina Conquer",
+  "signature": "Tehkné Solutions",
+  "assets": [
+    {
+      "id": "LANDMARK_MINE_NEUTRAL_01",
+      "role": "mine",
+      "family": "WORLD_LANDMARKS",
+      "subfamily": "EXTRACTION/MINE",
+      "file": "art/LANDMARK_MINE_NEUTRAL_01.png",
+      "state": "neutral",
+      "application": "HOC2 Living Map mine territories"
+    }
+  ]
+}
