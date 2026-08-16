@@ -6,18 +6,34 @@
   "asset_count": 1,
   "asset_id": "LANDMARK_MINE_NEUTRAL_01",
   "signature": "Tehkné Solutions",
-  "renderable": {
+  "source_master": {
     "format": "PNG",
     "mode": "RGBA",
     "width": 2048,
     "height": 2048,
     "bytes": 4524328,
-    "sha256": "9014411a8c81b89adc3c4ba52b5a3fafd4ad925c7033699c5590e94d36749069",
-    "fully_transparent_fraction": 0.572248,
-    "near_transparent_fraction_lt_10": 0.582508,
-    "nontransparent_bbox_alpha_gt_20": [64, 544, 1984, 1984],
+    "sha256": "9014411a8c81b89adc3c4ba52b5a3fafd4ad925c7033699c5590e94d36749069"
+  },
+  "renderable": {
+    "format": "PNG",
+    "mode": "P",
+    "palette_colors": 32,
+    "width": 2048,
+    "height": 2048,
+    "bytes": 500338,
+    "sha256": "24dbda111549c16d2a3607410a2ed7372d182b592509bc77d1bd390bc9d98b5d",
+    "fully_transparent_fraction": 0.583629,
+    "near_transparent_fraction_lt_10": 0.584915,
+    "nontransparent_bbox_alpha_gt_20": [65, 544, 1983, 1984],
     "pivot_contract": "bottom-center",
-    "bottom_margin_px": 64
+    "bottom_margin_px": 64,
+    "gameplay_scale_mae_0_255": {
+      "64px": 2.671,
+      "96px": 2.581,
+      "140px": 2.665,
+      "220px": 2.788,
+      "280px": 2.89
+    }
   },
   "semantic_review": {
     "family": "WORLD_LANDMARKS / EXTRACTION / MINE",
@@ -25,16 +41,7 @@
     "distinct_from": ["city", "fortress", "mountain-only terrain", "rock pile", "resource icon", "ui-marker"],
     "faction_encoding": "neutral",
     "candidate_state": "frozen",
-    "authored_features": [
-      "reinforced portal",
-      "timber supports",
-      "rail network",
-      "ore carts",
-      "crane and winch",
-      "forge workshop",
-      "operations tower",
-      "storage and excavated footprint"
-    ]
+    "authored_features": ["reinforced portal", "timber supports", "rail network", "ore carts", "crane and winch", "forge workshop", "operations tower", "storage and excavated footprint"]
   },
-  "remaining_gate": "commit exact PNG binary and validate exact candidate in CI"
+  "remaining_gate": "commit exact optimized runtime PNG and pass permanent HOC candidate binary gate"
 }
