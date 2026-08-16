@@ -25,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           root='candidates/hoc/city-neutral/.materialize/runtime384hex'
-          for i in 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14; do
+          for i in 00 01 02 03 04 05 06 07; do
             test -f "$root/part-$i.hex" || {
               echo "ready=false" >> "$GITHUB_OUTPUT"
               exit 0
