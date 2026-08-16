@@ -26,32 +26,22 @@ The master remains the high-fidelity source artifact and is not regenerated.
 
 ## Canonical runtime representation
 
-The same frozen artwork was deterministically optimized for map/runtime delivery without redraw or semantic changes:
+The same frozen artwork is deterministically optimized for map delivery:
 
-- `2048 × 2048` indexed PNG (`P`, 32-color optimized palette);
-- SHA-256: `24dbda111549c16d2a3607410a2ed7372d182b592509bc77d1bd390bc9d98b5d`;
-- size: `500,338 bytes`;
-- fully transparent canvas coverage: `58.3629%`;
-- nontransparent bbox (`alpha > 20`): `65,544 → 1983,1984`;
-- bottom-center pivot contract preserved;
-- visual delta versus the RGBA master at HOC gameplay sizes is small: mean absolute RGBA difference stays approximately `2.58–2.89 / 255` from 64 px through 280 px.
+- `512 × 512` indexed PNG (`P`, 64-color optimized palette);
+- SHA-256: `4398f8d96c1bfb50d89a34717f4ce18a5ad69140864dec99eb814d7e3d9b00c4`;
+- size: `48,099 bytes`;
+- bottom-center composition preserved;
+- current `LivingMap` displays landmark art at `96 × 96`, so this runtime retains more than 5× source resolution headroom;
+- mean absolute visual delta versus the RGBA master remains approximately `2.46–3.07 / 255` across 64–220 px review sizes.
 
-This master/runtime split is intentional: the master preserves source fidelity; the optimized PNG is the version intended for repository/runtime materialization.
+This master/runtime split is intentional: source fidelity remains in the 2048px master; the repository and game ship the appropriately sized runtime asset.
 
 ## Semantic result
 
-Candidate A reads as a **constructed extraction installation** through:
+Candidate A reads as a **constructed extraction installation** through reinforced portal, timber supports, rail network, ore carts, crane/winch machinery, forge/workshop, operations tower, storage and excavated terrain. It is intentionally distinct from City, Fortress, mountain-only terrain, loose rocks and resource icons.
 
-1. reinforced mine portal embedded in rock;
-2. timber retaining structure and visible supports;
-3. rail network entering/leaving the portal;
-4. multiple ore carts;
-5. crane/winch extraction machinery;
-6. forge/workshop and operational support structures;
-7. excavated earth/rock integrated into the industrial footprint;
-8. lookout/operations tower and storage cues.
-
-It is intentionally distinct from City, Fortress, mountain-only terrain, loose rocks and resource icons. It replaces generic `rocks`, `mountain`, `cave` and `ore icon` fallback readings after promotion.
+After promotion it replaces generic `rocks`, `mountain`, `cave` and `ore icon` fallback readings for Mine territories.
 
 ## Permanent Forge gate
 
@@ -63,7 +53,7 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
   --root candidates/hoc/mine-neutral
 ```
 
-The current red candidate gate is therefore truthful and expected until the exact runtime PNG is committed. Generic CI alone does not count as completion.
+The current red candidate gate is truthful and expected until the exact runtime PNG is committed. Generic CI alone does not count as completion.
 
 After the binary gate passes, perform one gameplay-scale review at desktop `1366×768` and portrait `390×844`. If it passes, close Mine and proceed to the City+Mine package; do not generate BLUE/RED/DEPLETED variants yet.
 
