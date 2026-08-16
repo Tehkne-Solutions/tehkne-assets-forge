@@ -24,21 +24,7 @@ The exploration/concept sheets are references only. Candidate A is frozen: no fu
 
 ## Forge candidate validation
 
-The frozen Candidate A package is expected to pass the fail-closed candidate contract on `main` once the exact binary is physically present:
-
-```json
-{
-  "valid": true,
-  "mode": "candidate",
-  "schema": "hoc/world-landmarks/v1",
-  "project": "Hexa Octarina Conquer",
-  "asset_count": 1,
-  "asset_id": "LANDMARK_CITY_NEUTRAL_01",
-  "signature": "Tehkné Solutions"
-}
-```
-
-Canonical command:
+The frozen Candidate A package is expected to pass the fail-closed candidate contract once the exact binary is physically present:
 
 ```bash
 tehkne-assets-forge validate-hoc-landmark-candidate \
@@ -46,9 +32,13 @@ tehkne-assets-forge validate-hoc-landmark-candidate \
   --root candidates/hoc/city-neutral
 ```
 
+## Permanent binary gate
+
+`main` now contains `HOC Landmark Candidate Gate` (Forge #11 / `802042005a09…`). Any PR touching `candidates/hoc/**` must physically contain its canonical asset, match `SHA256SUMS.txt`, and pass `validate-hoc-landmark-candidate`. A generic green CI no longer counts as candidate completion.
+
 ## Remaining gate
 
-The exact neutral binary has been produced and preserved outside the repository. The PR remains fail-closed until that exact PNG is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and CI validates the file against the checksum above.
+The exact neutral binary has been produced and preserved outside the repository. The PR remains fail-closed until that exact PNG is physically committed to `art/LANDMARK_CITY_NEUTRAL_01.png` and the permanent binary gate validates the file against the checksum above.
 
 This is a **binary materialization blocker only**. Do not generate another City, do not start BLUE/RED/DAMAGED variants, and do not integrate City into HOC runtime before that gate is satisfied.
 
