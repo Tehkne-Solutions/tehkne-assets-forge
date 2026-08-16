@@ -1,0 +1,78 @@
+name: HOC Landmark Candidate Gate
+
+on:
+  pull_request:
+    paths:
+      - 'candidates/hoc/**'
+      - '.github/workflows/hoc-landmark-candidate-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-hoc-candidates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Forge
+        run: python -m pip install -e .
+
+      - name: Validate every staged HOC landmark candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t manifests < <(find candidates/hoc -name pack-manifest.json -type f -print 2>/dev/null | sort)
+          if [ "${#manifests[@]}" -eq 0 ]; then
+            echo 'No staged HOC landmark candidates in this PR.'
+            exit 0
+          fi
+
+          for manifest in "${manifests[@]}"; do
+            root="$(dirname "$manifest")"
+            echo "::group::HOC candidate ${root}"
+
+            test -f "$root/SHA256SUMS.txt" || {
+              echo "Missing fail-closed checksum file: $root/SHA256SUMS.txt" >&2
+              exit 1
+            }
+
+            asset_rel="$(python - "$manifest" <<'PY'
+import json
+import sys
+from pathlib import Path
+p = Path(sys.argv[1])
+data = json.loads(p.read_text(encoding='utf-8'))
+assets = data.get('assets') or []
+if len(assets) != 1:
+    raise SystemExit(f'candidate manifest must contain exactly one asset, got {len(assets)}')
+asset = assets[0]
+path = asset.get('file')
+if not path:
+    raise SystemExit('candidate manifest asset has no file path')
+print(path)
+PY
+)"
+
+            test -f "$root/$asset_rel" || {
+              echo "Missing canonical candidate binary: $root/$asset_rel" >&2
+              exit 1
+            }
+
+            (
+              cd "$root"
+              sha256sum -c SHA256SUMS.txt
+            )
+
+            python -m tehkne_assets_forge.cli validate-hoc-landmark-candidate \
+              "$manifest" \
+              --root "$root"
+
+            echo "::endgroup::"
+          done
