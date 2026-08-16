@@ -1,0 +1,72 @@
+name: Materialize HOC Mine Neutral Runtime
+
+on:
+  push:
+    branches:
+      - agent/hoc-mine-neutral-candidate
+    paths:
+      - 'candidates/hoc/mine-neutral/.materialize/runtime512/**'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check complete transport
+        id: ready
+        shell: bash
+        run: |
+          shopt -s nullglob
+          parts=(candidates/hoc/mine-neutral/.materialize/runtime512/part-*.b64)
+          echo "parts=${#parts[@]}"
+          if [ "${#parts[@]}" -ne 8 ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Python
+        if: steps.ready.outputs.ready == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Materialize exact Mine runtime
+        if: steps.ready.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p candidates/hoc/mine-neutral/art
+          cat candidates/hoc/mine-neutral/.materialize/runtime512/part-*.b64 | base64 -d > candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png
+          test "$(stat -c%s candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png)" = "48099"
+          echo '4398f8d96c1bfb50d89a34717f4ce18a5ad69140864dec99eb814d7e3d9b00c4  candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png' | sha256sum -c -
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('candidates/hoc/mine-neutral/art/LANDMARK_MINE_NEUTRAL_01.png')
+          b=p.read_bytes()
+          assert b[:8] == b'\x89PNG\r\n\x1a\n'
+          assert int.from_bytes(b[16:20], 'big') == 512
+          assert int.from_bytes(b[20:24], 'big') == 512
+          print('MINE_RUNTIME_OK', p.stat().st_size)
+          PY
+          python -m pip install -e .
+          python -m tehkne_assets_forge.cli validate-hoc-landmark-candidate candidates/hoc/mine-neutral/pack-manifest.json --root candidates/hoc/mine-neutral
+
+      - name: Commit clean materialized candidate
+        if: steps.ready.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf candidates/hoc/mine-neutral/.materialize
+          rm -f .github/workflows/materialize-mine-neutral.yml
+          git config user.name 'tehkne-ci'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat(hoc): materialize Mine Candidate A runtime'
+          git push
