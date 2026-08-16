@@ -5,7 +5,7 @@ on:
     branches:
       - agent/hoc-city-neutral-candidate
     paths:
-      - 'candidates/hoc/city-neutral/.materialize/runtime384hex/**'
+      - 'candidates/hoc/city-neutral/.materialize/runtime384safe/**'
       - '.github/workflows/materialize-city-neutral.yml'
 
 permissions:
@@ -24,9 +24,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          root='candidates/hoc/city-neutral/.materialize/runtime384hex'
-          required=(00a 00b 00c 00d 01 02 03 04 05 06 07)
-          for i in "${required[@]}"; do
+          root='candidates/hoc/city-neutral/.materialize/runtime384safe'
+          for i in $(seq -w 0 29); do
             test -f "$root/part-$i.hex" || {
               echo "ready=false" >> "$GITHUB_OUTPUT"
               exit 0
@@ -42,20 +41,9 @@ jobs:
         run: |
           set -euo pipefail
           root='candidates/hoc/city-neutral'
-          transport="$root/.materialize/runtime384hex"
+          transport="$root/.materialize/runtime384safe"
           mkdir -p "$root/art"
-          cat \
-            "$transport/part-00a.hex" \
-            "$transport/part-00b.hex" \
-            "$transport/part-00c.hex" \
-            "$transport/part-00d.hex" \
-            "$transport/part-01.hex" \
-            "$transport/part-02.hex" \
-            "$transport/part-03.hex" \
-            "$transport/part-04.hex" \
-            "$transport/part-05.hex" \
-            "$transport/part-06.hex" \
-            "$transport/part-07.hex" | xxd -r -p > "$root/art/LANDMARK_CITY_NEUTRAL_01.png"
+          cat "$transport"/part-*.hex | xxd -r -p > "$root/art/LANDMARK_CITY_NEUTRAL_01.png"
 
           file="$root/art/LANDMARK_CITY_NEUTRAL_01.png"
           test "$(stat -c%s "$file")" = '30503'
