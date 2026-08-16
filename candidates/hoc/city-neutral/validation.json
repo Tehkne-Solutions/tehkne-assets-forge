@@ -6,24 +6,44 @@
   "asset_count": 1,
   "asset_id": "LANDMARK_CITY_NEUTRAL_01",
   "signature": "Tehkné Solutions",
-  "renderable": {
+  "source_master": {
     "format": "PNG",
     "mode": "RGBA",
     "width": 2048,
     "height": 2048,
     "bytes": 4052562,
     "sha256": "18f4b6df860fcfe46f37e7c51ee8f1c03ea6de2a9ed37ad83de222deb8bb881b",
-    "fully_transparent_fraction": 0.619939,
-    "near_transparent_fraction_lt_10": 0.622139,
-    "nontransparent_bbox_alpha_gt_20": [64, 673, 1984, 1984],
     "pivot_contract": "bottom-center",
     "bottom_margin_px": 64
   },
+  "renderable": {
+    "format": "PNG",
+    "mode": "P",
+    "palette_colors": 64,
+    "width": 384,
+    "height": 384,
+    "bytes": 30503,
+    "sha256": "9c0b521e0ee001a307c051d33540aa73022d91561ce5aadbe7a6b0acfdbf2dd3",
+    "fully_transparent_fraction": 0.622281,
+    "near_transparent_fraction_lt_10": 0.624200,
+    "nontransparent_bbox_alpha_gt_20": [12, 126, 372, 372],
+    "pivot_contract": "bottom-center",
+    "runtime_rationale": "LivingMap currently renders authored landmark art at 96x96; 384px runtime keeps exactly 4x source headroom while avoiding shipping the 2048px master.",
+    "gameplay_scale_mae_0_255": {
+      "64px": 2.219,
+      "96px": 2.260,
+      "140px": 2.727,
+      "220px": 3.302
+    }
+  },
   "semantic_review": {
+    "family": "WORLD_LANDMARKS / SETTLEMENT / CITY",
     "reads_as": ["city", "settlement", "population", "economy", "civilization"],
     "distinct_from": ["fortress", "tower", "camp", "mine", "ui-marker"],
     "faction_encoding": "neutralized",
-    "candidate_state": "frozen"
+    "candidate_state": "frozen",
+    "authored_features": ["civic center", "clustered homes and workshops", "market", "farm", "windmill", "streets and inhabited footprint"]
   },
-  "remaining_gate": "commit exact neutral PNG binary and validate exact SHA in CI"
+  "binary_materialization": "complete",
+  "remaining_gate": "permanent HOC candidate binary gate plus gameplay-scale desktop/portrait review"
 }
