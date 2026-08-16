@@ -25,7 +25,8 @@ jobs:
         run: |
           set -euo pipefail
           root='candidates/hoc/city-neutral/.materialize/runtime384hex'
-          for i in 00 01 02 03 04 05 06 07; do
+          required=(00a 00b 00c 00d 01 02 03 04 05 06 07)
+          for i in "${required[@]}"; do
             test -f "$root/part-$i.hex" || {
               echo "ready=false" >> "$GITHUB_OUTPUT"
               exit 0
@@ -43,7 +44,18 @@ jobs:
           root='candidates/hoc/city-neutral'
           transport="$root/.materialize/runtime384hex"
           mkdir -p "$root/art"
-          cat "$transport"/part-*.hex | xxd -r -p > "$root/art/LANDMARK_CITY_NEUTRAL_01.png"
+          cat \
+            "$transport/part-00a.hex" \
+            "$transport/part-00b.hex" \
+            "$transport/part-00c.hex" \
+            "$transport/part-00d.hex" \
+            "$transport/part-01.hex" \
+            "$transport/part-02.hex" \
+            "$transport/part-03.hex" \
+            "$transport/part-04.hex" \
+            "$transport/part-05.hex" \
+            "$transport/part-06.hex" \
+            "$transport/part-07.hex" | xxd -r -p > "$root/art/LANDMARK_CITY_NEUTRAL_01.png"
 
           file="$root/art/LANDMARK_CITY_NEUTRAL_01.png"
           test "$(stat -c%s "$file")" = '30503'
